@@ -5,6 +5,7 @@
 
 #include "../sampler/sampler.h"
 #include "batch_prefill_base.h"
+#include "../../support/debug_utils.h"
 
 namespace mlc {
 namespace llm {
@@ -161,6 +162,9 @@ class NewRequestPrefillActionObj : public BatchPrefillBaseActionObj {
                                                      logits_for_sample->dtype);
     logit_processor_->InplaceUpdateLogits(logits_for_sample, generation_cfg, mstates_for_logitproc,
                                           request_ids);
+
+    // - Debug: Print logits if debugging is enabled
+    DebugPrintLogits(logits_for_sample, "PREFILL", request_ids);
 
     // - Compute probability distributions.
     NDArray probs_on_device =
