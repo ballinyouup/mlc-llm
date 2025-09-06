@@ -8,7 +8,6 @@
 #include <numeric>
 
 #include "../../support/random.h"
-#include "../../support/debug_utils.h"
 #include "../config.h"
 #include "../model.h"
 #include "../sampler/sampler.h"
@@ -151,9 +150,6 @@ class BatchDecodeActionObj : public EngineActionObj {
     // - Update logits.
     logits = logits.CreateView({num_rsentries, logits->shape[2]}, logits->dtype);
     logit_processor_->InplaceUpdateLogits(logits, generation_cfg, mstates, request_ids);
-
-    // - Debug: Print logits if debugging is enabled
-    DebugPrintLogits(logits, "DECODE", request_ids);
 
     // - Compute probability distributions.
     NDArray probs_on_device =
